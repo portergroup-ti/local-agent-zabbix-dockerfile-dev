@@ -40,6 +40,7 @@ RUN set -eux && \
             iputils \
             pcre2 \
             libgcc \
+            libc6-compat \
             libcurl \
             git \
             libmodbus \
@@ -70,11 +71,15 @@ RUN set -eux && \
     chown --quiet -R zabbix:root /etc/zabbix/ /var/lib/zabbix/ && \
     chgrp -R 0 /etc/zabbix/ /var/lib/zabbix/ && \
     chmod -R g=u /etc/zabbix/ /var/lib/zabbix/ && \
-    rm -rf /var/cache/apk/* && \
-    git clone https://github.com/thspinto/isecnet-go && \
-    cp -R isecnet-go/* /var/lib/zabbix/ && \
-    cd /var/lib/zabbix/ && \
-    go run .
+    rm -rf /var/cache/apk/*
+
+#### build ISECNET-GO
+RUN set -eux && \
+    git clone https://github.com/thspinto/isecnet-go  && \
+    cd /isecnet-go/ && \
+    go build . && \
+    cp -R isecnet-go /var/lib/zabbix/ && \
+    rm -rf /isecnet-go
 
 EXPOSE 10050/TCP
 
