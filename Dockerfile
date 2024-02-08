@@ -45,6 +45,7 @@ RUN set -eux && \
             git \
             libmodbus \
             curl \
+            jq \
             libldap" && \
     apk add \
             --no-cache \
